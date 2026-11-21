@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPORT ZONE | Tienda Deportiva & Panel Admin</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    /* Navbar superior */
+    .navbar {
+      background-color: #111827;
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+
+    .brand span {
+      color: #fbbf24;
+    }
+
+    .nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    /* Banner */
+    .header {
+      background: linear-gradient(135deg, #111827, #1d4ed8);
+      color: #ffffff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    /* Botones generales */
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 0.95rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      background-color: #1d4ed8;
+      color: #ffffff;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #1e40af;
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .btn-warning {
+      background-color: #f59e0b;
+      color: #111827;
+    }
+
+    .btn-warning:hover:not(:disabled) {
+      background-color: #d97706;
+    }
+
+    .btn-dark {
+      background-color: #1f2937;
+    }
+
+    .btn-dark:hover:not(:disabled) {
+      background-color: #000000;
+    }
+
+    .btn-success {
+      background-color: #16a34a;
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background-color: #15803d;
+    }
+
+    .btn-danger {
+      background-color: #dc2626;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background-color: #b91c1c;
+    }
+
+    /* Layout Cliente: Catálogo + Carrito lateral */
+    .layout-tienda {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .buscar-id-box {
+      background: #ffffff;
+      padding: 1.1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      margin-bottom: 1.5rem;
+    }
+
+    .buscar-id-box label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.92rem;
+    }
+
+    .buscar-id-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    input, select {
+      padding: 0.55rem 0.8rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      width: 100%;
+    }
+
+    .buscar-id-controls input {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .estado {
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    /* Grid de productos */
+    .grid-productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      height: 190px;
+      background-color: #e5e7eb;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge-id {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(17, 24, 39, 0.85);
+      color: #fbbf24;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .categoria {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #1d4ed8;
+    }
+
+    .card-body h3 {
+      font-size: 1.08rem;
+      margin: 0.3rem 0 0.5rem;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #4b5563;
+      margin-bottom: 0.6rem;
+    }
+
+    .precio {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 0.75rem;
+    }
+
+    .compra-controls {
+      display: flex;
+      gap: 0.45rem;
+      margin-top: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    .compra-controls input {
+      width: 72px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .compra-controls button {
+      flex: 1;
+    }
+
+    .btn-detalle {
+      width: 100%;
+      background-color: #374151;
+      font-size: 0.82rem;
+      padding: 0.45rem;
+    }
+
+    /* Carrito lateral */
+    .carrito-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 80px;
+    }
+
+    .carrito-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .carrito-lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 320px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .carrito-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9fafb;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      gap: 0.5rem;
+    }
+
+    .carrito-item-info strong {
+      display: block;
+      color: #111827;
+    }
+
+    .carrito-item-info span {
+      color: #4b5563;
+      font-size: 0.8rem;
+    }
+
+    .carrito-resumen {
+      border-top: 2px solid #e5e7eb;
+      padding-top: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .resumen-linea {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+      font-size: 0.92rem;
+    }
+
+    .resumen-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #111827;
+      margin-top: 0.5rem;
+    }
+
+    /* Panel de Administración (CRUD) */
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .panel-box {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 1.35rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+    }
+
+    .panel-box h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #111827;
+    }
+
+    .form-group {
+      margin-bottom: 0.85rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #374151;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+
+    .tabla-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.7rem 0.6rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      background-color: #111827;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .thumb-admin {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .acciones-td {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .acciones-td button {
+      padding: 0.35rem 0.6rem;
+      font-size: 0.78rem;
+    }
+
+    /* Modales (Detalle GET ID y Login Admin) */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .modal-contenido {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal-contenido.grande {
+      max-width: 650px;
+    }
+
+    .btn-cerrar {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #ef4444;
+      padding: 0.35rem 0.65rem;
+    }
+
+    #contenidoDetalle {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 1.25rem;
+      align-items: center;
+    }
+
+    .detalle-img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .error-msg {
+      color: #dc2626;
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 920px) {
+      .layout-tienda,
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .carrito-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #contenidoDetalle {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN -->
+  <nav class="navbar">
+    <div class="brand">⚡ SPORT<span>ZONE</span></div>
+    <div class="nav-actions">
+      <button id="btnVerCatalogo" class="btn-dark" onclick="mostrarVista('cliente')">Catálogo</button>
+      <button id="btnAbrirAdmin" class="btn-warning" onclick="abrirPanelAdmin()">Panel de Administración</button>
+      <button id="btnCerrarSesion" class="btn-danger oculto" onclick="cerrarSesionAdmin()">Cerrar Sesión Admin</button>
+    </div>
+  </nav>
+
+  <!-- ENCABEZADO -->
+  <header class="header">
+    <h1>⚡ SPORT ZONE — Ropa Deportiva</h1>
+    <p id="subtituloHeader">Catálogo oficial • Selecciona tus prendas, calcula tu total y compra en tiempo real</p>
+  </header>
+
+  <main class="container">
+
+    <!-- ========================================== -->
+    <!-- VISTA 1: CLIENTE (CATÁLOGO + CARRITO)      -->
+    <!-- ========================================== -->
+    <section id="vistaCliente" class="layout-tienda">
+      <div>
+        <!-- Consulta GET y GET por ID -->
+        <div class="buscar-id-box">
+          <label for="inputId">Consultar prenda específica por ID (GET /Productos/:id):</label>
+          <div class="buscar-id-controls">
+            <input type="text" id="inputId" placeholder="Ingresa un ID (ej. 1)">
+            <button onclick="buscarPorInputId()">Consultar ID</button>
+            <button class="btn-dark" onclick="obtenerTodos()">Actualizar Catálogo (GET)</button>
+          </div>
+          <p id="mensajeEstado" class="estado"></p>
+        </div>
+
+        <!-- Grid de Productos -->
+        <div id="gridProductos" class="grid-productos"></div>
+      </div>
+
+      <!-- Carrito de Compras con cálculo automático -->
+      <aside class="carrito-card">
+        <h2>
+          🛒 Tu Compra
+          <span id="contadorItems" style="font-size: 0.85rem; color: #1d4ed8;">0 prendas</span>
+        </h2>
+
+        <ul id="listaCarrito" class="carrito-lista">
+          <li style="color: #6b7280; font-size: 0.9rem; text-align: center; padding: 1.5rem 0;">
+            Aún no has seleccionado productos.
+          </li>
+        </ul>
+
+        <div class="carrito-resumen">
+          <div class="resumen-linea">
+            <span>Cantidad total de prendas:</span>
+            <strong id="totalUnidades">0</strong>
+          </div>
+          <div class="resumen-total">
+            <span>Total a pagar:</span>
+            <span id="totalPagar">Bs. 0.00</span>
+          </div>
+        </div>
+
+        <button id="btnConfirmarCompra" class="btn-success" style="width: 100%; padding: 0.75rem;" onclick="confirmarCompra()" disabled>
+          Confirmar Compra y Descontar Stock
+        </button>
+      </aside>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VISTA 2: PANEL DE ADMINISTRACIÓN (CRUD)    -->
+    <!-- ========================================== -->
+    <section id="vistaAdmin" class="admin-layout oculto">
+      <!-- Formulario Crear / Editar (POST y PUT) -->
+      <div class="panel-box">
+        <h2 id="tituloFormAdmin">➕ Nueva Prenda (POST)</h2>
+        <form id="formAdminProducto" onsubmit="guardarProductoAdmin(event)">
+          <input type="hidden" id="adminProdId">
+
+          <div class="form-group">
+            <label for="adminNombre">Nombre de la prenda</label>
+            <input type="text" id="adminNombre" placeholder="Ej. Canguro Deportivo Pro" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="adminCategoria">Categoría</label>
+              <input type="text" id="adminCategoria" placeholder="Ej. Canguros" required>
+            </div>
+            <div class="form-group">
+              <label for="adminTalla">Talla</label>
+              <select id="adminTalla" required>
+                <option value="S">S</option>
+                <option value="M" selected>M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="40">40</option>
+                <option value="41">41</option>
+                <option value="42">42</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="adminPrecio">Precio (Bs.)</label>
+              <input type="number" step="0.01" min="1" id="adminPrecio" placeholder="150" required>
+            </div>
+            <div class="form-group">
+              <label for="adminStock">Stock</label>
+              <input type="number" min="0" id="adminStock" placeholder="10" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="adminImagen">URL de Imagen (opcional)</label>
+            <input type="text" id="adminImagen" placeholder="https://... (si lo dejas vacío usa foto deportiva)">
+          </div>
+
+          <button type="submit" class="btn-success" style="width: 100%;">Guardar en MockAPI</button>
+          <button type="button" id="btnCancelarEdit" class="btn-dark oculto" style="width: 100%; margin-top: 0.5rem;" onclick="resetFormularioAdmin()">
+            Cancelar Edición
+          </button>
+        </form>
+      </div>
+
+      <!-- Tabla CRUD de Productos -->
+      <div class="panel-box">
+        <h2>📋 Inventario de Productos (CRUD MockAPI)</h2>
+        <div class="tabla-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Talla</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaAdminBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL 1: DETALLE DE PRODUCTO (GET /Productos/:id) -->
+  <div id="modalDetalle" class="modal oculto" onclick="cerrarModalFondo(event, 'modalDetalle')">
+    <div class="modal-contenido grande">
+      <button class="btn-cerrar" onclick="cerrarModal('modalDetalle')">✕</button>
+      <div id="contenidoDetalle"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: LOGIN PANEL DE ADMINISTRACIÓN -->
+  <div id="modalLogin" class="modal oculto" onclick="cerrarModalFondo(event, 'modalLogin')">
+    <div class="modal-contenido">
+      <button class="btn-cerrar" onclick="cerrarModal('modalLogin')">✕</button>
+      <h2 style="margin-bottom: 0.4rem;">🔐 Panel de Administración</h2>
+      <p style="font-size: 0.88rem; color: #4b5563; margin-bottom: 1rem;">
+        Ingresa tus credenciales para gestionar el CRUD de productos.
+      </p>
+      <form onsubmit="procesarLogin(event)">
+        <div class="form-group">
+          <label for="loginUsuario">Usuario</label>
+          <input type="text" id="loginUsuario" placeholder="admin" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" placeholder="123" required>
+        </div>
+        <p id="loginError" class="error-msg oculto">Usuario o contraseña incorrectos.</p>
+        <button type="submit" class="btn-warning" style="width: 100%; padding: 0.7rem;">
+          Ingresar al Panel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. CONFIGURACIÓN Y CREDENCIALES POR CÓDIGO
+    // ==========================================
+    const API_BASE = "https://6aff180f3a0e70bc8d54969e.mockapi.io/Productos";
+
+    const ADMIN_CREDENTIALS = {
+      usuario: "admin",
+      password: "123"
+    };
+
+    const CATALOGO_DEPORTIVO = [
+      {
+        nombre: "Polera Dry-Fit Pro",
+        categoria: "Poleras",
+        talla: "M",
+        imagen: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Short Running Ligero",
+        categoria: "Shorts",
+        talla: "L",
+        imagen: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Canguro Deportivo Training",
+        categoria: "Canguros",
+        talla: "XL",
+        imagen: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Zapatillas Running Boost",
+        categoria: "Calzado",
+        talla: "42",
+        imagen: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Conjunto Deportivo Completo",
+        categoria: "Conjuntos",
+        talla: "M",
+        imagen: "https://images.unsplash.com/photo-1518459031867-a89b944bffe4?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Camiseta Atletismo Tech",
+        categoria: "Poleras",
+        talla: "S",
+        imagen: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Buzo Urbano Oversize",
+        categoria: "Buzos",
+        talla: "L",
+        imagen: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Tenis Training Flex",
+        categoria: "Calzado",
+        talla: "41",
+        imagen: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Licra Deportiva Compresión",
+        categoria: "Licras",
+        talla: "M",
+        imagen: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Polera Negra Gym Fit",
+        categoria: "Poleras",
+        talla: "L",
+        imagen: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Pantalón Jogger Deportivo",
+        categoria: "Pantalones",
+        talla: "M",
+        imagen: "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        nombre: "Zapatillas Court White",
+        categoria: "Calzado",
+        talla: "40",
+        imagen: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    let productosActuales = [];
+    let carrito = []; // { id, nombre, precio, cantidad, stockOriginal }
+
+    function adaptarPrenda(prod, indice = 0) {
+      const numId = parseInt(prod.id, 10);
+      const pos = !isNaN(numId) && numId > 0
+        ? (numId - 1) % CATALOGO_DEPORTIVO.length
+        : indice % CATALOGO_DEPORTIVO.length;
+      const base = CATALOGO_DEPORTIVO[pos];
+
+      return {
+        ...prod,
+        nombre: (!prod.nombre || /^nombre\s*\d+$/i.test(prod.nombre)) ? base.nombre : prod.nombre,
+        categoria: (!prod.categoria || /^categoria\s*\d+$/i.test(prod.categoria)) ? base.categoria : prod.categoria,
+        talla: (!prod.talla || /^talla\s*\d+$/i.test(prod.talla)) ? base.talla : prod.talla,
+        imagen: (prod.imagen && prod.imagen.startsWith("http")) ? prod.imagen : base.imagen
+      };
+    }
+
+    // ==========================================
+    // 2. CONSUMO GET Y GET POR ID
+    // ==========================================
+    async function obtenerTodos() {
+      const estado = document.getElementById("mensajeEstado");
+      estado.textContent = "Cargando productos desde MockAPI (GET)...";
+
+      try {
+        const res = await fetch(API_BASE);
+        if (!res.ok) throw new Error("No se pudo conectar con MockAPI");
+
+        const raw = await res.json();
+        productosActuales = raw.map((item, idx) => adaptarPrenda(item, idx));
+
+        estado.textContent = `GET /Productos: ${productosActuales.length} prenda(s) disponibles.`;
+        renderizarCatalogo(productosActuales);
+        renderizarTablaAdmin(productosActuales);
+      } catch (err) {
+        estado.textContent = "Error: " + err.message;
+      }
+    }
+
+    async function obtenerProductoPorId(id) {
+      const estado = document.getElementById("mensajeEstado");
+      estado.textContent = `Consultando GET /Productos/${id}...`;
+
+      try {
+        const res = await fetch(`${API_BASE}/${encodeURIComponent(id)}`);
+        if (!res.ok) throw new Error(`No existe ningún producto con ID "${id}"`);
+
+        const raw = await res.json();
+        const producto = adaptarPrenda(raw);
+        estado.textContent = `GET /Productos/${producto.id} exitoso.`;
+        mostrarModalDetalle(producto);
+      } catch (err) {
+        estado.textContent = "Error: " + err.message;
+        alert(err.message);
+      }
+    }
+
+    function buscarPorInputId() {
+      const id = document.getElementById("inputId").value.trim();
+      if (!id) {
+        alert("Ingresa un ID válido.");
+        return;
+      }
+      obtenerProductoPorId(id);
+    }
+
+    // ==========================================
+    // 3. CATÁLOGO Y CARRITO (CANTIDAD + TOTAL EN VIVO)
+    // ==========================================
+    function renderizarCatalogo(lista) {
+      const grid = document.getElementById("gridProductos");
+      grid.innerHTML = "";
+
+      lista.forEach(prod => {
+        const stockNum = Number(prod.stock || 0);
+        const sinStock = stockNum <= 0;
+        const itemEnCarrito = carrito.find(c => c.id === prod.id);
+        const valorInput = itemEnCarrito ? itemEnCarrito.cantidad : 1;
+
+        const card = document.createElement("article");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-img-wrap">
+            <img src="${prod.imagen}" alt="${prod.nombre}">
+            <span class="badge-id">ID: ${prod.id}</span>
+          </div>
+          <div class="card-body">
+            <span class="categoria">${prod.categoria}</span>
+            <h3>${prod.nombre}</h3>
+            <div class="meta">
+              <span>Talla: <strong>${prod.talla}</strong></span>
+              <span style="color: ${sinStock ? '#dc2626' : '#16a34a'}; font-weight: 700;">
+                ${sinStock ? 'Agotado' : `Stock: ${stockNum}`}
+              </span>
+            </div>
+            <p class="precio">Bs. ${Number(prod.precio || 0).toFixed(2)}</p>
+
+            <div class="compra-controls">
+              <input
+                type="number"
+                id="cant-${prod.id}"
+                min="1"
+                max="${stockNum}"
+                value="${valorInput}"
+                oninput="actualizarCantidadEnVivo('${prod.id}')"
+                ${sinStock ? 'disabled' : ''}
+              >
+              <button
+                class="btn-success"
+                onclick="agregarAlCarrito('${prod.id}')"
+                ${sinStock ? 'disabled' : ''}>
+                ${sinStock ? 'Sin Stock' : '+ Agregar'}
+              </button>
+            </div>
+
+            <button class="btn-detalle" onclick="obtenerProductoPorId('${prod.id}')">
+              Ver detalle (GET ID)
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Si el producto ya está en el carrito, actualiza su cantidad y el monto a pagar al instante
+    function actualizarCantidadEnVivo(id) {
+      const producto = productosActuales.find(p => p.id === id);
+      if (!producto) return;
+
+      const inputCant = document.getElementById(`cant-${id}`);
+      const stockDisponible = Number(producto.stock || 0);
+      let nuevaCantidad = parseInt(inputCant.value, 10);
+
+      if (isNaN(nuevaCantidad) || nuevaCantidad < 1) return;
+
+      if (nuevaCantidad > stockDisponible) {
+        alert(`Stock insuficiente. Solo quedan ${stockDisponible} unidad(es) de "${producto.nombre}".`);
+        nuevaCantidad = stockDisponible;
+        inputCant.value = nuevaCantidad;
+      }
+
+      const itemExistente = carrito.find(item => item.id === id);
+      if (itemExistente) {
+        itemExistente.cantidad = nuevaCantidad;
+        renderizarCarrito();
+      }
+    }
+
+    function agregarAlCarrito(id) {
+      const producto = productosActuales.find(p => p.id === id);
+      if (!producto) return;
+
+      const inputCant = document.getElementById(`cant-${id}`);
+      const cantidadSolicitada = parseInt(inputCant.value, 10);
+      const stockDisponible = Number(producto.stock || 0);
+
+      if (isNaN(cantidadSolicitada) || cantidadSolicitada <= 0) {
+        alert("Ingresa una cantidad válida mayor a 0.");
+        return;
+      }
+
+      if (cantidadSolicitada > stockDisponible) {
+        alert(`Stock insuficiente. Solo quedan ${stockDisponible} unidad(es) de "${producto.nombre}".`);
+        return;
+      }
+
+      const itemExistente = carrito.find(item => item.id === id);
+      if (itemExistente) {
+        itemExistente.cantidad = cantidadSolicitada;
+      } else {
+        carrito.push({
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: Number(producto.precio),
+          cantidad: cantidadSolicitada,
+          stockOriginal: stockDisponible
+        });
+      }
+
+      renderizarCarrito();
+    }
+
+    function eliminarDelCarrito(id) {
+      carrito = carrito.filter(item => item.id !== id);
+      renderizarCarrito();
+    }
+
+    function renderizarCarrito() {
+      const listaEl = document.getElementById("listaCarrito");
+      const totalUnidadesEl = document.getElementById("totalUnidades");
+      const totalPagarEl = document.getElementById("totalPagar");
+      const contadorItemsEl = document.getElementById("contadorItems");
+      const btnConfirmar = document.getElementById("btnConfirmarCompra");
+
+      if (carrito.length === 0) {
+        listaEl.innerHTML = `
+          <li style="color: #6b7280; font-size: 0.9rem; text-align: center; padding: 1.5rem 0;">
+            Aún no has seleccionado productos.
+          </li>
+        `;
+        totalUnidadesEl.textContent = "0";
+        totalPagarEl.textContent = "Bs. 0.00";
+        contadorItemsEl.textContent = "0 prendas";
+        btnConfirmar.disabled = true;
+        return;
+      }
+
+      listaEl.innerHTML = "";
+      let sumaUnidades = 0;
+      let sumaTotalBs = 0;
+
+      carrito.forEach(item => {
+        const subtotal = item.precio * item.cantidad;
+        sumaUnidades += item.cantidad;
+        sumaTotalBs += subtotal;
+
+        const li = document.createElement("li");
+        li.className = "carrito-item";
+        li.innerHTML = `
+          <div class="carrito-item-info">
+            <strong>${item.nombre}</strong>
+            <span>${item.cantidad} x Bs. ${item.precio.toFixed(2)} = <b>Bs. ${subtotal.toFixed(2)}</b></span>
+          </div>
+          <button class="btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.78rem;" onclick="eliminarDelCarrito('${item.id}')">
+            Quitar
+          </button>
+        `;
+        listaEl.appendChild(li);
+      });
+
+      totalUnidadesEl.textContent = sumaUnidades;
+      totalPagarEl.textContent = `Bs. ${sumaTotalBs.toFixed(2)}`;
+      contadorItemsEl.textContent = `${sumaUnidades} prenda(s)`;
+      btnConfirmar.disabled = false;
+    }
+
+    // Descuenta el stock en MockAPI (PUT) por cada producto comprado
+    async function confirmarCompra() {
+      if (carrito.length === 0) return;
+
+      const btnConfirmar = document.getElementById("btnConfirmarCompra");
+      btnConfirmar.disabled = true;
+      btnConfirmar.textContent = "Procesando compra...";
+
+      try {
+        for (const item of carrito) {
+          const nuevoStock = Math.max(0, item.stockOriginal - item.cantidad);
+          await fetch(`${API_BASE}/${item.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ stock: nuevoStock })
+          });
+        }
+
+        alert("¡Compra realizada con éxito! El stock ha sido actualizado en MockAPI.");
+        carrito = [];
+        renderizarCarrito();
+        await obtenerTodos();
+      } catch (err) {
+        alert("Ocurrió un error al actualizar el stock: " + err.message);
+      } finally {
+        btnConfirmar.textContent = "Confirmar Compra y Descontar Stock";
+      }
+    }
+
+    // ==========================================
+    // 4. LOGIN Y NAVEGACIÓN PANEL ADMINISTRACIÓN
+    // ==========================================
+    function abrirPanelAdmin() {
+      if (sessionStorage.getItem("sportAdminAuth") === "true") {
+        mostrarVista("admin");
+      } else {
+        document.getElementById("loginError").classList.add("oculto");
+        document.getElementById("modalLogin").classList.remove("oculto");
+      }
+    }
+
+    function procesarLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById("loginUsuario").value.trim();
+      const pass = document.getElementById("loginPassword").value.trim();
+
+      if (user === ADMIN_CREDENTIALS.usuario && pass === ADMIN_CREDENTIALS.password) {
+        sessionStorage.setItem("sportAdminAuth", "true");
+        cerrarModal("modalLogin");
+        mostrarVista("admin");
+      } else {
+        document.getElementById("loginError").classList.remove("oculto");
+      }
+    }
+
+    function cerrarSesionAdmin() {
+      sessionStorage.removeItem("sportAdminAuth");
+      mostrarVista("cliente");
+    }
+
+    function mostrarVista(vista) {
+      const vistaCliente = document.getElementById("vistaCliente");
+      const vistaAdmin = document.getElementById("vistaAdmin");
+      const btnCerrar = document.getElementById("btnCerrarSesion");
+      const subtitulo = document.getElementById("subtituloHeader");
+
+      if (vista === "admin") {
+        vistaCliente.classList.add("oculto");
+        vistaAdmin.classList.remove("oculto");
+        btnCerrar.classList.remove("oculto");
+        subtitulo.textContent = "Panel de Administración • Gestión CRUD completa de inventario";
+      } else {
+        vistaAdmin.classList.add("oculto");
+        vistaCliente.classList.remove("oculto");
+        btnCerrar.classList.toggle("oculto", sessionStorage.getItem("sportAdminAuth") !== "true");
+        subtitulo.textContent = "Catálogo oficial • Selecciona tus prendas, calcula tu total y compra en tiempo real";
+      }
+    }
+
+    // ==========================================
+    // 5. CRUD COMPLETO EN PANEL DE ADMINISTRACIÓN
+    // ==========================================
+    function renderizarTablaAdmin(lista) {
+      const tbody = document.getElementById("tablaAdminBody");
+      tbody.innerHTML = "";
+
+      lista.forEach(prod => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${prod.id}</strong></td>
+          <td><img src="${prod.imagen}" alt="${prod.nombre}" class="thumb-admin"></td>
+          <td>${prod.nombre}</td>
+          <td>${prod.categoria}</td>
+          <td>${prod.talla}</td>
+          <td>Bs. ${Number(prod.precio).toFixed(2)}</td>
+          <td><strong>${prod.stock}</strong></td>
+          <td class="acciones-td">
+            <button class="btn-dark" onclick="obtenerProductoPorId('${prod.id}')">Ver detalle</button>
+            <button class="btn-warning" onclick="cargarProductoEnFormulario('${prod.id}')">Editar</button>
+            <button class="btn-danger" onclick="eliminarProductoAdmin('${prod.id}')">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // CREATE (POST) y UPDATE (PUT)
+    async function guardarProductoAdmin(e) {
+      e.preventDefault();
+      const id = document.getElementById("adminProdId").value;
+
+      const datos = {
+        nombre: document.getElementById("adminNombre").value.trim(),
+        categoria: document.getElementById("adminCategoria").value.trim(),
+        talla: document.getElementById("adminTalla").value,
+        precio: Number(document.getElementById("adminPrecio").value),
+        stock: Number(document.getElementById("adminStock").value),
+        imagen: document.getElementById("adminImagen").value.trim() || CATALOGO_DEPORTIVO[0].imagen
+      };
+
+      const url = id ? `${API_BASE}/${id}` : API_BASE;
+      const metodo = id ? "PUT" : "POST";
+
+      try {
+        const res = await fetch(url, {
+          method: metodo,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datos)
+        });
+
+        if (!res.ok) throw new Error("Error al guardar en MockAPI");
+
+        resetFormularioAdmin();
+        await obtenerTodos();
+        alert(id ? "Producto actualizado correctamente." : "Nueva prenda agregada al catálogo.");
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    function cargarProductoEnFormulario(id) {
+      const prod = productosActuales.find(p => p.id === id);
+      if (!prod) return;
+
+      document.getElementById("adminProdId").value = prod.id;
+      document.getElementById("adminNombre").value = prod.nombre;
+      document.getElementById("adminCategoria").value = prod.categoria;
+      document.getElementById("adminTalla").value = prod.talla;
+      document.getElementById("adminPrecio").value = prod.precio;
+      document.getElementById("adminStock").value = prod.stock;
+      document.getElementById("adminImagen").value = prod.imagen;
+
+      document.getElementById("tituloFormAdmin").textContent = `✏️ Editando Prenda ID #${prod.id}`;
+      document.getElementById("btnCancelarEdit").classList.remove("oculto");
+    }
+
+    function resetFormularioAdmin() {
+      document.getElementById("formAdminProducto").reset();
+      document.getElementById("adminProdId").value = "";
+      document.getElementById("tituloFormAdmin").textContent = "➕ Nueva Prenda (POST)";
+      document.getElementById("btnCancelarEdit").classList.add("oculto");
+    }
+
+    // DELETE
+    async function eliminarProductoAdmin(id) {
+      if (!confirm(`¿Estás seguro de eliminar el producto ID #${id}?`)) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("No se pudo eliminar el producto");
+
+        await obtenerTodos();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    // ==========================================
+    // 6. MODALES
+    // ==========================================
+    function mostrarModalDetalle(prod) {
+      const detalle = document.getElementById("contenidoDetalle");
+      detalle.innerHTML = `
+        <img src="${prod.imagen}" alt="${prod.nombre}" class="detalle-img">
+        <div>
+          <span class="categoria">ID: ${prod.id} • ${prod.categoria}</span>
+          <h2 style="margin: 0.35rem 0;">${prod.nombre}</h2>
+          <p style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem;">
+            Bs. ${Number(prod.precio || 0).toFixed(2)}
+          </p>
+          <p style="margin-bottom: 0.4rem;"><strong>Talla:</strong> ${prod.talla}</p>
+          <p style="margin-bottom: 0.4rem;"><strong>Stock disponible:</strong> ${prod.stock ?? 0} unidades</p>
+          <p><strong>Categoría:</strong> ${prod.categoria}</p>
+        </div>
+      `;
+      document.getElementById("modalDetalle").classList.remove("oculto");
+    }
+
+    function cerrarModal(idModal) {
+      document.getElementById(idModal).classList.add("oculto");
+    }
+
+    function cerrarModalFondo(e, idModal) {
+      if (e.target.id === idModal) {
+        cerrarModal(idModal);
+      }
+    }
+
+    // Carga inicial
+    obtenerTodos();
+  </script>
+</body>
+</html>
